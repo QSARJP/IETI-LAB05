@@ -1,74 +1,61 @@
 import React from 'react';
 import './App.css';
-import {BrowserRouter as Router, Link, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Link, Route, Switch} from 'react-router-dom';
 import {Login} from './components/Login';
 import {MainView} from './components/MainView';
+import {TodoApp} from "./components/TodoApp";
+import {SignUp} from "./components/SignUp"
+
 
 class App extends React.Component {
 
   constructor(props) {
+      const isLoggedIn = localStorage.getItem("isLoggedIn") == "true" ;
       super(props);
       const LoginView = () => (
-          <Login handleSignIn={this.handleSignIn}/>
+          <div>
+              {isLoggedIn ? <MainView/> : <Login/>}
+          </div>
+          
       );
     
       const Main = () => (
-          <MainView/>
+          <div>
+              {isLoggedIn ? <MainView/> : <Login/>}
+          </div>
       );
-      this.state = {loginView: LoginView,main: Main,isLoggedIn:false}
-      this.handleSignIn=this.handleSignIn.bind(this);
-      localStorage.setItem('email', "juan@mail.com");
-      localStorage.setItem('name', "juan Ospina");
-      localStorage.setItem('password', "123");
-      if (!localStorage.getItem("isLoggedIn")){
-          localStorage.setItem("isLoggedIn",this.state.isLoggedIn);
-      }
+      const Task = () => (
+          <div>
+              {isLoggedIn ? <TodoApp/> : <Login/>}
+          </div>
+      );
+      const SignUpView = () => (
+          <div>
+              {isLoggedIn ? <MainView/> : <SignUp/>}
+          </div>
+      );
+      this.state = {loginView: LoginView,main: Main,task: Task ,signUp:SignUpView}
+
+
   }
 
-  handleSignIn(){
-      this.setState({isLoggedIn:true})
-  }
 
   render() {
-      const LoginView = this.state.loginView;
-      const Main = this.state.main;
-      const isLoggedIn = this.state.isLoggedIn || (localStorage.getItem("isLoggedIn") == "true" );
-      let choose;
-      if (!isLoggedIn){
-          choose = (
-              <div>
-                  <ul>
-                      <li><Link to="/">Login</Link></li>
-                  </ul>
-                  <div>
-                      <Route exact path="/" component={LoginView}/>
-                  </div>
-              </div>
-
-          );       
-      }else {
-          choose = (
-              <div>
-                  <ul>
-                      <li><Link to="/Main">Main</Link></li>
-                  </ul>
-                  <div>
-                       <Route path="/Main" component={Main}/>
-                  </div>
-              </div>
-
-          );    
-
-      }
-
+      const { loginView, signUp, main, task, updateProfile} = this.state;
+      
       return (
-          
-          <Router>
-              <div className="App">
-
-                  {choose}
-              </div>
+          <div>
+            <Router>
+              <Switch>
+                <Route exact path="/Main" component={main}/>
+                <Route exact path="/" component={loginView}/>
+                <Route exact path="/task" component={task}/>
+                <Route exact path="/signUp" component={signUp}/>
+                <Route exact path="/update-profile" component={updateProfile}/>
+              </Switch>
           </Router>
+          </div>
+          
       );
   }
 

@@ -18,6 +18,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import {Image} from "@material-ui/icons";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+
 
 const drawerWidth = 240;
 
@@ -61,16 +64,19 @@ function ResponsiveDrawer(props) {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
-
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn")
+    localStorage.setItem("isLoggedIn", false);
+  };
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
   const drawer = (
-    <div>
+    <div >
       <div className={classes.toolbar} />
       <Divider />
-      <div>
+      <div align={"center"}>
         <Image src ="https://s3.us-east-2.amazonaws.com/dzuz14/thumbnails/aurora.jpg"></Image>
         <Typography variant="h6" noWrap>
           {name}
@@ -80,16 +86,18 @@ function ResponsiveDrawer(props) {
         <Typography variant="h6" noWrap>
           {email}
         </Typography>
+        
       </div>
       <Divider />
-      <List>
-        {['Logout'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
+      <div align={"center"}>
+        <Grid item xs alignContent={"center"} onClick={handleLogout}>
+          <IconButton href="/" variant="body2">
+            {"Logout"}
+          </IconButton>
+        </Grid>
+      </div>
+
+
     </div>
   );
 

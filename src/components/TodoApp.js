@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import DatePicker from 'react-datepicker';
-import logo from './logo.svg';
 import moment from "moment";
-import {TodoList} from "./TodoList";
 import { TextField, Button } from "@material-ui/core";
+import ResponsiveDrawer from "./ResponsiveDrawer";
 
 
 
@@ -12,9 +11,10 @@ export class TodoApp extends Component{
 
     constructor(props) {
         super(props);
-        this.state = {items: [], text: '', priority: 0, dueDate: moment()};
-        this.handleTextChange = this.handleTextChange.bind(this);
-        this.handlePriorityChange = this.handlePriorityChange.bind(this);
+        this.state = {items: [], description: '',responsible:'', status: '', dueDate: moment()};
+        this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+        this.handleResponsibleChange = this.handleResponsibleChange.bind(this);
+        this.handleStatusChange = this.handleStatusChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -22,16 +22,20 @@ export class TodoApp extends Component{
     render(){
         return (
             <div className="App" onSubmit={this.handleSubmit}>
-
+                <ResponsiveDrawer></ResponsiveDrawer>
+                <br/>
+                <br/>
                 <br/>
                 <br/>
                 <form onSubmit={this.handleSubmit} className="todo-form">
-                    <h3>New TODO</h3>
-                    <TextField id="text" label="Text" onChange={this.handleTextChange} value={this.state.text}/>
-                    
+                    <h3>New TASK </h3>
+                    <TextField id="description" label="description" onChange={this.handleDescriptionChange} value={this.state.description}/>
                     <br/>
                     <br/>
-                    <TextField id="priority" label="Priority" type = "number" onChange={this.handlePriorityChange} value={this.state.priority} />
+                    <TextField id="responsible" label="responsible" onChange={this.handleResponsibleChange} value={this.state.responsible}/>
+                    <br/>
+                    <br/>
+                    <TextField id="status" label="status" onChange={this.handleStatusChange} value={this.state.status} />
                   
                     <br/>
                     <br/>
@@ -44,11 +48,10 @@ export class TodoApp extends Component{
                     </DatePicker>
                     <br/>
                     <br/>
-                    <Button variant="contained" color="secondary" type="submit" > Add #{this.state.items.length + 1} </Button>
+                    <Button variant="contained" color="secondary" type="submit" href={"/Main"}> Add #{this.state.items.length + 1} </Button>
                 </form>
                 <br/>
                 <br/>
-                <TodoList todoList={this.state.items}/>
                 
             </div>
 
@@ -56,15 +59,20 @@ export class TodoApp extends Component{
 
         );
     }
-        handleTextChange(e) {
+    handleDescriptionChange(e) {
+        this.setState({
+            description: e.target.value
+        });
+    }
+
+    handleResponsibleChange(e) {
+        this.setState({
+            responsible: e.target.value
+        });
+    }
+    handleStatusChange(e) {
             this.setState({
-                text: e.target.value
-            });
-        }
-    
-        handlePriorityChange(e) {
-            this.setState({
-                priority: e.target.value
+                status: e.target.value
             });
         }
     
@@ -78,19 +86,21 @@ export class TodoApp extends Component{
     
             e.preventDefault();
     
-            if (!this.state.text.length || !this.state.priority.length || !this.state.dueDate)
+            if (!this.state.description.length || !this.state.responsable.length || !this.state.status.length || !this.state.dueDate)
                 return;
     
             const newItem = {
-                text: this.state.text,
-                priority: this.state.priority,
+                description: this.state.description,
+                responsable: this.state.responsable,
+                status: this.state.status,
                 dueDate: this.state.dueDate,
     
             };
             this.setState(prevState => ({
                 items: prevState.items.concat(newItem),
-                text: '',
-                priority: '',
+                description: '',
+                responsable: '',
+                status: '',
                 dueDate: ''
             }));
         }

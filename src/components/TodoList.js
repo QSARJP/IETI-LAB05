@@ -10,7 +10,7 @@ export class TodoList extends React.Component {
     render() {
         const todoList = this.props.todoList.map((todo, i) => {
             return (
-                <Todo key={i} text={todo.text} priority={todo.priority} dueDate={todo.dueDate}/>
+                <Todo key={i} desciption={todo.description} responsable={todo.responsable} status={todo.status} dueDate={todo.dueDate}/>
             );
         });
 
@@ -18,8 +18,9 @@ export class TodoList extends React.Component {
             <table>
                 <thead>
                 <tr>
-                    <th>Task</th>
-                    <th>Priority</th>
+                    <th>Description</th>
+                    <th>Responsable</th>
+                    <th>Status</th>
                     <th>Due Date</th>
                 </tr>
                 </thead>

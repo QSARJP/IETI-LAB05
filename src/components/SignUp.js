@@ -13,30 +13,42 @@ import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 
 
-export class Login extends React.Component{
+export class SignUp extends React.Component{
 
     constructor(props){
         super(props);
-        this.state ={password:"",email:""};
+        this.state ={name:"",password:"",pwconfirm:"",email:""};
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleUserEmail = this.handleUserEmail.bind(this);
+        this.handleUserName = this.handleUserName.bind(this);
         this.handleUserPassword = this.handleUserPassword.bind(this);
+        this.handleUserPasswordConfirm = this.handleUserPasswordConfirm.bind(this);
+
 
     }
+
+    handleUserName(uName){
+        this.setState({name: uName.target.value});
+    }
+
     handleUserEmail(uemail){
         this.setState({email: uemail.target.value});
     }
     handleUserPassword(upass){
         this.setState({password: upass.target.value});
     }
+    handleUserPasswordConfirm(upassConfirm){
+        this.setState({pwconfirm: upassConfirm.target.value});
+    }
 
     handleSubmit(){
-        if (localStorage.getItem("email") === this.state.email && localStorage.getItem("password") === this.state.password){
-            console.log("ASDadsadasdadad")
+        if (localStorage.getItem("email") !== this.state.email && localStorage.getItem("password") !== this.state.password && this.state.password === this.state.pwconfirm){
+            localStorage.setItem('email', this.state.email);
+            localStorage.setItem('name', this.state.name);
+            localStorage.setItem('password', this.state.password);
             localStorage.setItem("isLoggedIn", true);
-            this.props.handleLogin();
         }else{
-            alert("El usuario no se encuentra registrado !!")
+            alert("El usuario ya se encuentra registrado !!")
         }
     }
 
@@ -44,22 +56,33 @@ export class Login extends React.Component{
         return (
             <React.Fragment>
                 <CssBaseline />
+
                 <main className="loginBox" onSubmit={this.handleSubmit}>
                     <Paper className="paper">
                         <Avatar className="avatar">
                             <LockIcon />
                         </Avatar>
-                        <Typography variant="h2">Sign In</Typography>
+                        <Typography variant="h2">Sign Up</Typography>
                         <form className="form" >
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="name">name</InputLabel>
+                                <Input
+                                    id="name"
+                                    name="name"
+                                    autoComplete="name"
+                                    value = {this.state.name}
+                                    onChange = {this.handleUserName}
+                                    autoFocus />
+                            </FormControl>
                             <FormControl margin="normal" required fullWidth>
                                 <InputLabel htmlFor="email">Email Address</InputLabel>
                                 <Input
-                                 id="email" 
-                                 name="email" 
-                                 autoComplete="email" 
-                                 value = {this.state.email}
-                                 onChange = {this.handleUserEmail}
-                                 autoFocus />
+                                    id="email"
+                                    name="email"
+                                    autoComplete="email"
+                                    value = {this.state.email}
+                                    onChange = {this.handleUserEmail}
+                                    autoFocus />
                             </FormControl>
                             <FormControl margin="normal" required fullWidth>
                                 <InputLabel htmlFor="password">Password</InputLabel>
@@ -74,35 +97,44 @@ export class Login extends React.Component{
 
                                 />
                             </FormControl>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="password">Password Confirm</InputLabel>
+                                <Input
+                                    name="password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="current-password"
+                                    value = {this.state.pwconfirm}
+                                    onChange = {this.handleUserPasswordConfirm}
+                                    autoFocus
+
+                                />
+                            </FormControl>
+
                             <Button
                                 type="submit"
                                 fullWidth
                                 variant="contained"
                                 color="primary"
-                                className="submit"
+                                className="signUpSubmit"
                             >
-                                Login 
+                                Login
                             </Button>
                             <br></br>
                             <br></br>
                             <div >
-                              <Grid>
-                                <Grid item xs >
-                                  <Link href="#" variant="body2">
-                                    Forgot password?
-                                  </Link>
+                                <Grid>
+                                    <br></br>
+                                    <Grid item xs >
+                                        <Link href="/" variant="body2">
+                                            {" Aleady have an account? Sign In"}
+                                        </Link>
+                                    </Grid>
                                 </Grid>
-                                <br></br>
-                                <Grid item xs >
-                                  <Link href="/signUp" variant="body2">
-                                    {"Don't have an account? Sign Up"}
-                                  </Link>
-                                </Grid>
-                              </Grid>
 
                             </div>
-                           
-                            
+
+
                         </form>
                     </Paper>
                 </main>
@@ -111,3 +143,4 @@ export class Login extends React.Component{
     }
 
 }
+
